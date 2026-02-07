@@ -157,7 +157,7 @@ end)
 -- [[ UI TABS ]]
 local MainTab = Window:CreateTab("Auto Farm", 4483362458)
 MainTab:CreateToggle({
-    Name = "Start Infinite Mob Farm",
+    Name = "Auto Farm(NO BUGS)",
     CurrentValue = false,
     Callback = function(v) _G.AutoFarm = v end,
 })
