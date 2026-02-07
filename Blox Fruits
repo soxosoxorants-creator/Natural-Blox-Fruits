@@ -14,7 +14,7 @@ local roseGoldTheme = {
 local Window = Rayfield:CreateWindow({
     Name = "Natural Hub | Mob Master 2800",
     LoadingTitle = "Natural Hub",
-    LoadingSubtitle = "Every Quest - No Bosses",
+    LoadingSubtitle = "Full Roadmap - No Bosses",
     Theme = roseGoldTheme,
     ConfigurationSaving = {Enabled = true, FileName = "NaturalHub_MobOnly"},
     KeySystem = false
@@ -107,6 +107,11 @@ task.spawn(function()
         task.wait(0.1)
         if _G.AutoFarm then
             pcall(function()
+                -- Noclip while farming
+                for _, v in pairs(LP.Character:GetChildren()) do
+                    if v:IsA("BasePart") then v.CanCollide = false end
+                end
+
                 LP.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                 local level = LP.Data.Level.Value
                 local info = LevelData[1]
@@ -115,7 +120,6 @@ task.spawn(function()
                 end
 
                 if not LP.PlayerGui.Main:FindFirstChild("QuestVisual") then
-                    -- Fly to NPC
                     local root = LP.Character.HumanoidRootPart
                     local dist = (root.Position - info.Pos.p).Magnitude
                     game:GetService("TweenService"):Create(root, TweenInfo.new(dist/250, Enum.EasingStyle.Linear), {CFrame = info.Pos}):Play()
@@ -127,7 +131,7 @@ task.spawn(function()
                     if mob and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
                         LP.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 12, 0)
                         
-                        -- Bring Mob
+                        -- Bring Mob Logic
                         for _, v in pairs(enemyFolder:GetChildren()) do
                             if v.Name == info.Name and v:FindFirstChild("HumanoidRootPart") then
                                 v.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
@@ -140,7 +144,6 @@ task.spawn(function()
                         game:GetService("VirtualUser"):CaptureController()
                         game:GetService("VirtualUser"):Button1Down(Vector2.new(0,0))
                     else
-                        -- Return to quest start point to wait for spawn
                         local root = LP.Character.HumanoidRootPart
                         local dist = (root.Position - info.Pos.p).Magnitude
                         game:GetService("TweenService"):Create(root, TweenInfo.new(dist/250, Enum.EasingStyle.Linear), {CFrame = info.Pos}):Play()
@@ -154,11 +157,12 @@ end)
 -- [[ UI TABS ]]
 local MainTab = Window:CreateTab("Auto Farm", 4483362458)
 MainTab:CreateToggle({
-    Name = "Auto Farm(ALL 3 SEAS)",
+    Name = "Start Infinite Mob Farm",
     CurrentValue = false,
     Callback = function(v) _G.AutoFarm = v end,
 })
 
+-- [[ AUTO STATS ]]
 task.spawn(function()
     while task.wait(5) do
         if _G.AutoStats then
@@ -168,4 +172,11 @@ task.spawn(function()
     end
 end)
 
-Rayfield:Notify({Title = "Natural Hub", Content = "Mob-Only Mode Loaded!", Duration = 5})
+-- [[ ANTI-AFK ]]
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+    game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    task.wait(1)
+    game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+
+Rayfield:Notify({Title = "Natural Hub", Content = "Mob-Only Mode & Anti-AFK Ready!", Duration = 5})
