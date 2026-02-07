@@ -2,9 +2,9 @@ local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 -- [[ THEME: Rose Gold 2026 Elite ]]
 local Window = Rayfield:CreateWindow({
-    Name = "Natural Hub | Master Edition",
+    Name = "Natural Hub | BLOX FRUITS",
     LoadingTitle = "Natural Hub",
-    LoadingSubtitle = "Full 1-2800 Roadmap",
+    LoadingSubtitle = "FASTEST NO BAN SCRIPT",
     Theme = "RoseGold",
     ConfigurationSaving = {Enabled = true, FileName = "NaturalHub_vFinal"}
 })
