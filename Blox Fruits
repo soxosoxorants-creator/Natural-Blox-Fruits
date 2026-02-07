@@ -1,118 +1,193 @@
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+--// SERVICES
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local VirtualUser = game:GetService("VirtualUser")
 
+local LP = Players.LocalPlayer
+local Char = LP.Character or LP.CharacterAdded:Wait()
+
+--// UI
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local Window = Rayfield:CreateWindow({
     Name = "Natural Hub | BLOX FRUITS",
     LoadingTitle = "Natural Hub v2800",
-    LoadingSubtitle = "BLOX FRUITS NOOB",
+    LoadingSubtitle = "Complete Rewrite",
     Theme = "Rose",
-    ConfigurationSaving = {Enabled = true, FileName = "NatHub_Complete"}
+    ConfigurationSaving = {Enabled = true, FileName = "NatHub_Rewrite"}
 })
 
+--// GLOBAL FLAGS
 _G.AutoFarm = false
-_G.Weapon = "Melee"
-_G.FastAttack = false
 _G.FarmNearest = false
+_G.AutoFactory = false
+_G.AutoPirate = false
+_G.FastAttack = false
+
 _G.AutoStats = false
 _G.StatType = "Melee"
 _G.StatAmount = 1
-_G.AutoFactory = false
-_G.AutoPirate = false
 
-local LP = game.Players.LocalPlayer
-local RS = game:GetService("ReplicatedStorage")
+_G.FarmWeapon = "Melee" -- Melee / Sword / Blox Fruit
 
--- [[ THE COMPLETE LEVEL DATA - EVERY QUEST ]]
+--// FULL LEVEL DATA (SEA 1–3)
 local LevelData = {
-    -- SEA 1
-    {0, "Bandit", "Bandit Recruiter", CFrame.new(1059, 16, 1546)},
-    {15, "Monkey", "Monkey Quest", CFrame.new(-1598, 37, 153)},
-    {20, "Gorilla", "Monkey Quest", CFrame.new(-1598, 37, 153)},
-    {30, "Pirate", "Pirate Quest", CFrame.new(-1140, 14, 3828)},
-    {40, "Brute", "Pirate Quest", CFrame.new(-1140, 14, 3828)},
-    {60, "Desert Bandit", "Desert Quest", CFrame.new(896, 6, 4390)},
-    {75, "Desert Officer", "Desert Quest", CFrame.new(896, 6, 4390)},
-    {90, "Snow Bandit", "Snow Quest", CFrame.new(1386, 87, -1297)},
-    {100, "Snowman", "Snow Quest", CFrame.new(1386, 87, -1297)},
-    {120, "Chief Petty Officer", "MarineQuest", CFrame.new(-4842, 22, 4366)},
-    {150, "Sky Bandit", "SkyQuest", CFrame.new(-4840, 717, -2622)},
-    {190, "Prisoner", "PrisonQuest", CFrame.new(5307, 1, 474)},
-    {250, "Toga Warrior", "ColosseumQuest", CFrame.new(-1575, 7, -2982)},
-    {300, "Military Soldier", "MagmaQuest", CFrame.new(-5313, 12, 8516)},
-    {375, "Fishman Warrior", "FishmanQuest", CFrame.new(61122, 18, 1567)},
-    {525, "Royal Squad", "SkyQuest3", CFrame.new(-7859, 5545, -381)},
-    {625, "Galley Pirate", "CyborgQuest", CFrame.new(5256, 38, 4050)},
-    -- SEA 2
-    {700, "Raider", "Quest1", CFrame.new(-424, 73, 1836)},
-    {775, "Swan Pirate", "Quest2", CFrame.new(1031, 121, 1406)},
-    {875, "Marine Captain", "MarineQuest2", CFrame.new(-2440, 72, -3220)},
-    {925, "Zombie", "ZombieQuest", CFrame.new(-5414, 159, -722)},
-    {1000, "Snow Trooper", "SnowQuest2", CFrame.new(-6059, 15, -4902)},
-    {1100, "Lab Subordinate", "HotColdQuest", CFrame.new(-5430, 15, -5300)},
-    {1250, "Ship Deckhand", "CursedShipQuest", CFrame.new(920, 125, 33000)},
-    {1350, "Arctic Warrior", "ArcticQuest", CFrame.new(6373, 26, -6337)},
-    {1425, "Sea Soldier", "ForgottenQuest", CFrame.new(-3050, 15, -10000)},
-    -- SEA 3
-    {1500, "Pirate Millionaire", "Quest1", CFrame.new(-11822, 5, -8352)},
-    {1575, "Dragon Crew Warrior", "Quest2", CFrame.new(-10396, 163, -3318)},
-    {1700, "Marine Commodore", "MarineTree", CFrame.new(-10996, 5, -3051)},
-    {1775, "Fishman Raider", "TurtleQuest", CFrame.new(-12100, 330, -2250)},
-    {1975, "Reborn Skeleton", "HauntedQuest1", CFrame.new(-8750, 142, 6030)},
-    {2075, "Peanut Scout", "TreatsQuest1", CFrame.new(-815, 65, -10950)},
-    {2200, "Ice Cream Chef", "TreatsQuest2", CFrame.new(-1200, 65, -11200)},
-    {2300, "Cookie Pirate", "TreatsQuest3", CFrame.new(-815, 65, -10950)},
-    {2450, "Tiki Warrior", "TikiQuest", CFrame.new(-16200, 10, 500)},
-    {2600, "Deepsea Creature", "DeepQuest", CFrame.new(-18000, -200, 1000)},
-    {2725, "Atlantic Vanguard", "AtlanticQuest", CFrame.new(-20000, -500, 2500)},
-    {2800, "Abyssal Guard", "VoidQuest", CFrame.new(-25000, 100, 5000)}
+    -- Sea 1
+    {0,"Bandit","Bandit Recruiter",CFrame.new(1059,16,1546)},
+    {15,"Monkey","Monkey Quest",CFrame.new(-1598,37,153)},
+    {20,"Gorilla","Monkey Quest",CFrame.new(-1598,37,153)},
+    {30,"Pirate","Pirate Quest",CFrame.new(-1140,14,3828)},
+    {40,"Brute","Pirate Quest",CFrame.new(-1140,14,3828)},
+    {60,"Desert Bandit","Desert Quest",CFrame.new(896,6,4390)},
+    {75,"Desert Officer","Desert Quest",CFrame.new(896,6,4390)},
+    {90,"Snow Bandit","Snow Quest",CFrame.new(1386,87,-1297)},
+    {100,"Snowman","Snow Quest",CFrame.new(1386,87,-1297)},
+    {120,"Chief Petty Officer","MarineQuest",CFrame.new(-4842,22,4366)},
+    {150,"Sky Bandit","SkyQuest",CFrame.new(-4840,717,-2622)},
+    {190,"Prisoner","PrisonQuest",CFrame.new(5307,1,474)},
+    {250,"Toga Warrior","ColosseumQuest",CFrame.new(-1575,7,-2982)},
+    {300,"Military Soldier","MagmaQuest",CFrame.new(-5313,12,8516)},
+    {375,"Fishman Warrior","FishmanQuest",CFrame.new(61122,18,1567)},
+    {525,"Royal Squad","SkyQuest3",CFrame.new(-7859,5545,-381)},
+    {625,"Galley Pirate","CyborgQuest",CFrame.new(5256,38,4050)},
+
+    -- Sea 2
+    {700,"Raider","Quest1",CFrame.new(-424,73,1836)},
+    {775,"Swan Pirate","Quest2",CFrame.new(1031,121,1406)},
+    {875,"Marine Captain","MarineQuest2",CFrame.new(-2440,72,-3220)},
+    {925,"Zombie","ZombieQuest",CFrame.new(-5414,159,-722)},
+    {1000,"Snow Trooper","SnowQuest2",CFrame.new(-6059,15,-4902)},
+    {1100,"Lab Subordinate","HotColdQuest",CFrame.new(-5430,15,-5300)},
+    {1250,"Ship Deckhand","CursedShipQuest",CFrame.new(920,125,33000)},
+    {1350,"Arctic Warrior","ArcticQuest",CFrame.new(6373,26,-6337)},
+    {1425,"Sea Soldier","ForgottenQuest",CFrame.new(-3050,15,-10000)},
+
+    -- Sea 3
+    {1500,"Pirate Millionaire","Quest1",CFrame.new(-11822,5,-8352)},
+    {1575,"Dragon Crew Warrior","Quest2",CFrame.new(-10396,163,-3318)},
+    {1700,"Marine Commodore","MarineTree",CFrame.new(-10996,5,-3051)},
+    {1775,"Fishman Raider","TurtleQuest",CFrame.new(-12100,330,-2250)},
+    {1975,"Reborn Skeleton","HauntedQuest1",CFrame.new(-8750,142,6030)},
+    {2075,"Peanut Scout","TreatsQuest1",CFrame.new(-815,65,-10950)},
+    {2200,"Ice Cream Chef","TreatsQuest2",CFrame.new(-1200,65,-11200)},
+    {2300,"Cookie Pirate","TreatsQuest3",CFrame.new(-815,65,-10950)},
+    {2450,"Tiki Warrior","TikiQuest",CFrame.new(-16200,10,500)},
+    {2600,"Deepsea Creature","DeepQuest",CFrame.new(-18000,-200,1000)},
+    {2725,"Atlantic Vanguard","AtlanticQuest",CFrame.new(-20000,-500,2500)},
+    {2800,"Abyssal Guard","VoidQuest",CFrame.new(-25000,100,5000)}
 }
 
--- [[ FAST ATTACK ]]
+--// HELPERS
+local function SafeTP(cf)
+    if Char and Char:FindFirstChild("HumanoidRootPart") then
+        Char.HumanoidRootPart.CFrame = cf + Vector3.new(0,8,0)
+    end
+end
+
+local function EquipWeapon()
+    if _G.FarmWeapon == "Blox Fruit" then return end
+    local tool = LP.Backpack:FindFirstChild(_G.FarmWeapon) or Char:FindFirstChild(_G.FarmWeapon)
+    if tool then Char.Humanoid:EquipTool(tool) end
+end
+
+local function GetNearestMob()
+    local closest, dist = nil, math.huge
+    if not Char:FindFirstChild("HumanoidRootPart") then return end
+    for _,m in pairs(workspace.Enemies:GetChildren()) do
+        if m:FindFirstChild("Humanoid") and m.Humanoid.Health > 0 then
+            local d = (m.HumanoidRootPart.Position - Char.HumanoidRootPart.Position).Magnitude
+            if d < dist then
+                dist = d
+                closest = m
+            end
+        end
+    end
+    return closest
+end
+
+--// FAST ATTACK
+local CombatFramework = require(LP.PlayerScripts.CombatFramework)
+local Controller = CombatFramework.activeController
+
+RunService.RenderStepped:Connect(function()
+    if _G.FastAttack and (_G.AutoFarm or _G.FarmNearest or _G.AutoFactory or _G.AutoPirate) then
+        pcall(function()
+            if Controller and not Controller.attacking then
+                Controller.timeToNextAttack = 0
+                Controller.hitboxMagnitude = 60
+                Controller:attack()
+            end
+        end)
+    end
+end)
+
+--// AUTO STATS
 task.spawn(function()
-    while task.wait() do
-        if _G.FastAttack and (_G.AutoFarm or _G.FarmNearest) then
+    while task.wait(1.5) do
+        if _G.AutoStats then
             pcall(function()
-                local tool = LP.Character:FindFirstChildOfClass("Tool")
-                if tool then
-                    RS.Remotes.Validator:FireServer(math.huge)
-                    tool:Activate()
-                end
+                RS.Remotes.CommF_:InvokeServer("AddPoint", _G.StatType, _G.StatAmount)
             end)
         end
     end
 end)
 
--- [[ MAIN AUTO FARM ]]
+--// MAIN FARM LOOP
 task.spawn(function()
-    while true do task.wait(0.1)
+    while task.wait(0.25) do
+        if not (_G.AutoFarm or _G.FarmNearest or _G.AutoFactory or _G.AutoPirate) then continue end
         pcall(function()
-            if _G.AutoFarm or _G.FarmNearest or _G.AutoFactory or _G.AutoPirate then
-                -- Global Noclip
-                for _, v in pairs(LP.Character:GetChildren()) do
-                    if v:IsA("BasePart") then v.CanCollide = false end
+            Char = LP.Character or LP.CharacterAdded:Wait()
+
+            for _,v in pairs(Char:GetChildren()) do
+                if v:IsA("BasePart") then v.CanCollide = false end
+            end
+
+            if _G.FarmNearest then
+                local m = GetNearestMob()
+                if m then EquipWeapon() SafeTP(m.HumanoidRootPart.CFrame * CFrame.new(0,7,0)) end
+                return
+            end
+
+            if _G.AutoFactory then
+                for _,m in pairs(workspace.Enemies:GetChildren()) do
+                    if m.Name:lower():find("factory") and m.Humanoid.Health > 0 then
+                        EquipWeapon()
+                        SafeTP(m.HumanoidRootPart.CFrame * CFrame.new(0,7,0))
+                        return
+                    end
+                end
+            end
+
+            if _G.AutoPirate then
+                for _,m in pairs(workspace.Enemies:GetChildren()) do
+                    if m.Name:lower():find("pirate") and m.Humanoid.Health > 0 then
+                        EquipWeapon()
+                        SafeTP(m.HumanoidRootPart.CFrame * CFrame.new(0,7,0))
+                        return
+                    end
+                end
+            end
+
+            if _G.AutoFarm then
+                local lvl = LP.Data.Level.Value
+                local info
+                for i = #LevelData,1,-1 do
+                    if lvl >= LevelData[i][1] then info = LevelData[i] break end
+                end
+                if not info then return end
+
+                if not LP.PlayerGui.Main:FindFirstChild("QuestVisual") then
+                    SafeTP(info[4])
+                    RS.Remotes.CommF_:InvokeServer("StartQuest", info[3], 1)
+                    return
                 end
 
-                if _G.AutoFarm then
-                    local myLvl = LP.Data.Level.Value
-                    local info = nil
-                    for i = #LevelData, 1, -1 do
-                        if myLvl >= LevelData[i][1] then info = LevelData[i] break end
-                    end
-
-                    if info then
-                        if not LP.PlayerGui.Main:FindFirstChild("QuestVisual") then
-                            LP.Character.HumanoidRootPart.CFrame = info[4]
-                            RS.Remotes.CommF_:InvokeServer("StartQuest", info[3], 1)
-                        else
-                            local mob = workspace.Enemies:FindFirstChild(info[2]) or workspace.NPCs:FindFirstChild(info[2])
-                            if mob and mob.Humanoid.Health > 0 then
-                                LP.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 11, 0)
-                                local t = LP.Backpack:FindFirstChild(_G.Weapon) or LP.Character:FindFirstChild(_G.Weapon)
-                                if t then LP.Character.Humanoid:EquipTool(t) end
-                            else
-                                -- HOVER SAFETY (Prevents Ocean TP)
-                                LP.Character.HumanoidRootPart.CFrame = info[4] + Vector3.new(0, 45, 0)
-                            end
-                        end
+                for _,m in pairs(workspace.Enemies:GetChildren()) do
+                    if m.Name == info[2] and m.Humanoid.Health > 0 then
+                        EquipWeapon()
+                        SafeTP(m.HumanoidRootPart.CFrame * CFrame.new(0,7,0))
+                        break
                     end
                 end
             end
@@ -120,28 +195,35 @@ task.spawn(function()
     end
 end)
 
--- [[ UI ]]
+--// UI
 local T1 = Window:CreateTab("Auto Grind")
-T1:CreateToggle({Name = "Auto Farm (ALL LEVELS)", CurrentValue = false, Callback = function(v) _G.AutoFarm = v end})
-T1:CreateDropdown({Name = "Weapon Type", Options = {"Melee", "Sword"}, CurrentOption = "Melee", Callback = function(v) _G.Weapon = v end})
-T1:CreateToggle({Name = "Fast Attack (Delta Fix)", CurrentValue = false, Callback = function(v) _G.FastAttack = v end})
 
-T1:CreateSection("Character Stats")
-T1:CreateToggle({Name = "Auto Stats", CurrentValue = false, Callback = function(v) _G.AutoStats = v end})
-T1:CreateDropdown({Name = "Stat Type", Options = {"Melee", "Defense", "Sword", "Blox Fruit"}, CurrentOption = "Melee", Callback = function(v) _G.StatType = v end})
+T1:CreateToggle({Name="Auto Farm (All Levels)",Callback=function(v)_G.AutoFarm=v end})
+T1:CreateToggle({Name="Farm Nearest",Callback=function(v)_G.FarmNearest=v end})
+T1:CreateToggle({Name="Auto Factory (Sea 2)",Callback=function(v)_G.AutoFactory=v end})
+T1:CreateToggle({Name="Auto Pirate Raid (Sea 3)",Callback=function(v)_G.AutoPirate=v end})
+T1:CreateToggle({Name="Fast Attack",Callback=function(v)_G.FastAttack=v end})
 
-local T2 = Window:CreateTab("World Events")
-T2:CreateToggle({Name = "Factory (Sea 2)", CurrentValue = false, Callback = function(v) _G.AutoFactory = v end})
-T2:CreateToggle({Name = "Pirate Raid (Sea 3)", CurrentValue = false, Callback = function(v) _G.AutoPirate = v end})
+T1:CreateSection("Farm Weapon")
+T1:CreateDropdown({
+    Name="Farm Using",
+    Options={"Melee","Sword","Blox Fruit"},
+    CurrentOption="Melee",
+    Callback=function(v)_G.FarmWeapon=v end
+})
 
--- Stats Loop
-task.spawn(function()
-    while task.wait(2) do if _G.AutoStats then RS.Remotes.CommF_:InvokeServer("AddPoint", _G.StatType, 1) end end
-end)
+T1:CreateSection("Auto Stats")
+T1:CreateToggle({Name="Auto Stats",Callback=function(v)_G.AutoStats=v end})
+T1:CreateDropdown({
+    Name="Stat To Upgrade",
+    Options={"Melee","Defense","Sword","Blox Fruit"},
+    CurrentOption="Melee",
+    Callback=function(v)_G.StatType=v end
+})
 
--- Anti-AFK
+--// ANTI AFK
 LP.Idled:Connect(function()
-    game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    VirtualUser:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
     task.wait(1)
-    game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    VirtualUser:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 end)
