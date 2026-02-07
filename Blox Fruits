@@ -1,0 +1,171 @@
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+-- [[ THEME: Rose Gold 2026 ]]
+local roseGoldTheme = {
+    ElementBackground = Color3.fromRGB(230, 190, 180),
+    ToggleEnabled = Color3.fromRGB(255, 150, 130),
+    ToggleDisabled = Color3.fromRGB(180, 140, 130),
+    Background = Color3.fromRGB(200, 160, 150),
+    TabBackground = Color3.fromRGB(240, 200, 190),
+    TextColor = Color3.fromRGB(100, 60, 50),
+    Topbar = Color3.fromRGB(220, 180, 170),
+}
+
+local Window = Rayfield:CreateWindow({
+    Name = "Natural Hub | Mob Master 2800",
+    LoadingTitle = "Natural Hub",
+    LoadingSubtitle = "Every Quest - No Bosses",
+    Theme = roseGoldTheme,
+    ConfigurationSaving = {Enabled = true, FileName = "NaturalHub_MobOnly"},
+    KeySystem = false
+})
+
+_G.AutoFarm = false
+_G.AutoStats = true
+
+-- [[ THE COMPLETE ROADMAP - ALL MOBS, NO BOSSES ]]
+local LevelData = {
+    -- --- FIRST SEA ---
+    {Level = 0,    Name = "Bandit",             NPC = "Bandit Recruiter", Pos = CFrame.new(1059, 16, 1546)},
+    {Level = 10,   Name = "Monkey",             NPC = "Monkey Quest",     Pos = CFrame.new(-1598, 37, 153)},
+    {Level = 20,   Name = "Gorilla",            NPC = "Gorilla Quest",    Pos = CFrame.new(-1210, 28, -492)},
+    {Level = 30,   Name = "Pirate",             NPC = "Pirate Quest",     Pos = CFrame.new(-1140, 14, 3828)},
+    {Level = 45,   Name = "Brute",              NPC = "Pirate Quest",     Pos = CFrame.new(-1140, 14, 3828)},
+    {Level = 60,   Name = "Desert Bandit",      NPC = "Desert Quest",      Pos = CFrame.new(896, 6, 4390)},
+    {Level = 75,   Name = "Desert Officer",     NPC = "Desert Quest",      Pos = CFrame.new(896, 6, 4390)},
+    {Level = 90,   Name = "Snow Bandit",        NPC = "Snow Quest",        Pos = CFrame.new(1386, 87, -1297)},
+    {Level = 105,  Name = "Snowman",            NPC = "Snow Quest",        Pos = CFrame.new(1386, 87, -1297)},
+    {Level = 120,  Name = "Chief Petty Officer", NPC = "MarineQuest",      Pos = CFrame.new(-4842, 22, 4366)},
+    {Level = 150,  Name = "Sky Bandit",         NPC = "SkyQuest",          Pos = CFrame.new(-4840, 717, -2622)},
+    {Level = 175,  Name = "Dark Puppet",        NPC = "SkyQuest",          Pos = CFrame.new(-4840, 717, -2622)},
+    {Level = 190,  Name = "Prisoner",           NPC = "PrisonQuest",       Pos = CFrame.new(5307, 1, 474)},
+    {Level = 210,  Name = "Dangerous Prisoner", NPC = "PrisonQuest",       Pos = CFrame.new(5307, 1, 474)},
+    {Level = 250,  Name = "Toga Warrior",       NPC = "ColosseumQuest",    Pos = CFrame.new(-1575, 7, -2982)},
+    {Level = 300,  Name = "Military Soldier",   NPC = "MagmaQuest",        Pos = CFrame.new(-5313, 12, 8516)},
+    {Level = 330,  Name = "Military Spy",       NPC = "MagmaQuest",        Pos = CFrame.new(-5313, 12, 8516)},
+    {Level = 375,  Name = "Fishman Warrior",    NPC = "FishmanQuest",      Pos = CFrame.new(61122, 18, 1567)},
+    {Level = 400,  Name = "Fishman Commando",   NPC = "FishmanQuest",      Pos = CFrame.new(61122, 18, 1567)},
+    {Level = 450,  Name = "Gods Guard",         NPC = "SkyQuest2",         Pos = CFrame.new(-4721, 845, -1910)},
+    {Level = 475,  Name = "Morian",             NPC = "SkyQuest2",         Pos = CFrame.new(-4721, 845, -1910)},
+    {Level = 525,  Name = "Shanda",             NPC = "SkyQuest3",         Pos = CFrame.new(-7859, 5545, -381)},
+    {Level = 550,  Name = "Wysper",             NPC = "SkyQuest3",         Pos = CFrame.new(-7859, 5545, -381)},
+    {Level = 625,  Name = "Galley Pirate",      NPC = "CyborgQuest",       Pos = CFrame.new(5256, 38, 4050)},
+    {Level = 650,  Name = "Galley Captain",     NPC = "CyborgQuest",       Pos = CFrame.new(5256, 38, 4050)},
+
+    -- --- SECOND SEA ---
+    {Level = 700,  Name = "Raider",             NPC = "Quest1",            Pos = CFrame.new(-424, 73, 1836)},
+    {Level = 725,  Name = "Mercenary",          NPC = "Quest1",            Pos = CFrame.new(-424, 73, 1836)},
+    {Level = 775,  Name = "Swan Pirate",        NPC = "Quest2",            Pos = CFrame.new(1031, 121, 1406)},
+    {Level = 875,  Name = "Marine Captain",     NPC = "MarineQuest2",      Pos = CFrame.new(-2440, 72, -3220)},
+    {Level = 900,  Name = "Marine Commodore",   NPC = "MarineQuest2",      Pos = CFrame.new(-2440, 72, -3220)},
+    {Level = 925,  Name = "Zombie",             NPC = "ZombieQuest",       Pos = CFrame.new(-5414, 159, -722)},
+    {Level = 950,  Name = "Vampire",            NPC = "ZombieQuest",       Pos = CFrame.new(-5414, 159, -722)},
+    {Level = 1000, Name = "Snow Trooper",       NPC = "SnowQuest2",        Pos = CFrame.new(-6059, 15, -4902)},
+    {Level = 1050, Name = "Winter Warrior",     NPC = "SnowQuest2",        Pos = CFrame.new(-6059, 15, -4902)},
+    {Level = 1100, Name = "Lab Subordinate",    NPC = "HotColdQuest",      Pos = CFrame.new(-5430, 15, -5300)},
+    {Level = 1150, Name = "Magma Ninja",        NPC = "HotColdQuest",      Pos = CFrame.new(-5430, 15, -5300)},
+    {Level = 1200, Name = "Lava Pirate",        NPC = "HotColdQuest2",     Pos = CFrame.new(-5430, 15, -5300)},
+    {Level = 1250, Name = "Ship Deckhand",      NPC = "CursedShipQuest",   Pos = CFrame.new(920, 125, 33000)},
+    {Level = 1275, Name = "Ship Engineer",      NPC = "CursedShipQuest",   Pos = CFrame.new(920, 125, 33000)},
+    {Level = 1300, Name = "Ship Steward",       NPC = "CursedShipQuest2",  Pos = CFrame.new(920, 125, 33000)},
+    {Level = 1350, Name = "Arctic Warrior",     NPC = "ArcticQuest",       Pos = CFrame.new(6373, 26, -6337)},
+    {Level = 1400, Name = "Snow Bandit",        NPC = "ArcticQuest",       Pos = CFrame.new(6373, 26, -6337)},
+    {Level = 1425, Name = "Sea Soldier",        NPC = "ForgottenQuest",    Pos = CFrame.new(-3050, 15, -10000)},
+    {Level = 1450, Name = "Water Fighter",      NPC = "ForgottenQuest",    Pos = CFrame.new(-3050, 15, -10000)},
+
+    -- --- THIRD SEA ---
+    {Level = 1500, Name = "Pirate Millionaire", NPC = "Quest1",            Pos = CFrame.new(-11822, 5, -8352)},
+    {Level = 1575, Name = "Pistol Billionaire", NPC = "Quest1",            Pos = CFrame.new(-11822, 5, -8352)},
+    {Level = 1625, Name = "Dragon Crew Warrior",NPC = "Quest2",            Pos = CFrame.new(-10396, 163, -3318)},
+    {Level = 1675, Name = "Dragon Crew Archer", NPC = "Quest2",            Pos = CFrame.new(-10396, 163, -3318)},
+    {Level = 1700, Name = "Fishman Raider",     NPC = "MarineTree",        Pos = CFrame.new(-10996, 5, -3051)},
+    {Level = 1775, Name = "Fishman Captain",    NPC = "MarineTree",        Pos = CFrame.new(-10996, 5, -3051)},
+    {Level = 1800, Name = "Forest Pirate",      NPC = "TurtleQuest",       Pos = CFrame.new(-12100, 330, -2250)},
+    {Level = 1875, Name = "Mythological Pirate",NPC = "TurtleQuest",       Pos = CFrame.new(-12100, 330, -2250)},
+    {Level = 1900, Name = "Jungle Pirate",      NPC = "DeepForest",         Pos = CFrame.new(-13500, 330, -2250)},
+    {Level = 1975, Name = "Musketeer Pirate",   NPC = "DeepForest",         Pos = CFrame.new(-13500, 330, -2250)},
+    {Level = 2025, Name = "Reborn Skeleton",    NPC = "HauntedQuest1",      Pos = CFrame.new(-8750, 142, 6030)},
+    {Level = 2100, Name = "Living Zombie",      NPC = "HauntedQuest1",      Pos = CFrame.new(-9515, 170, 6030)},
+    {Level = 2175, Name = "Demonic Soul",       NPC = "HauntedQuest2",      Pos = CFrame.new(-9515, 170, 6030)},
+    {Level = 2225, Name = "Cookie Pirate",      NPC = "TreatsQuest1",       Pos = CFrame.new(-815, 65, -10950)},
+    {Level = 2275, Name = "Cake Guard",         NPC = "TreatsQuest1",       Pos = CFrame.new(-1150, 70, -12500)},
+    {Level = 2325, Name = "Baking Staff",       NPC = "TreatsQuest2",       Pos = CFrame.new(-1150, 70, -12500)},
+    {Level = 2400, Name = "Cocoa Warrior",      NPC = "ChocolateQuest",     Pos = CFrame.new(650, 75, -13500)},
+    {Level = 2475, Name = "Candy Rebel",        NPC = "ChocolateQuest",     Pos = CFrame.new(650, 75, -13500)},
+    {Level = 2550, Name = "Tiki Warrior",       NPC = "TikiQuest",         Pos = CFrame.new(-16200, 10, 500)},
+    {Level = 2625, Name = "Tiki Shaman",        NPC = "TikiQuest",         Pos = CFrame.new(-16200, 10, 500)},
+    {Level = 2700, Name = "Abyssal Guard",      NPC = "AbyssQuest",        Pos = CFrame.new(-22000, 10, 5000)},
+    {Level = 2800, Name = "Void Stalker",       NPC = "VoidQuest",         Pos = CFrame.new(-50000, 50, -50000)}
+}
+
+local LP = game.Players.LocalPlayer
+local RS = game:GetService("ReplicatedStorage")
+
+-- [[ FARMING LOGIC ]]
+task.spawn(function()
+    while true do
+        task.wait(0.1)
+        if _G.AutoFarm then
+            pcall(function()
+                LP.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                local level = LP.Data.Level.Value
+                local info = LevelData[1]
+                for _, d in pairs(LevelData) do
+                    if level >= d.Level then info = d end
+                end
+
+                if not LP.PlayerGui.Main:FindFirstChild("QuestVisual") then
+                    -- Fly to NPC
+                    local root = LP.Character.HumanoidRootPart
+                    local dist = (root.Position - info.Pos.p).Magnitude
+                    game:GetService("TweenService"):Create(root, TweenInfo.new(dist/250, Enum.EasingStyle.Linear), {CFrame = info.Pos}):Play()
+                    RS.Remotes.CommF_:InvokeServer("StartQuest", info.NPC, 1)
+                else
+                    local enemyFolder = workspace:FindFirstChild("Enemies") or workspace:FindFirstChild("NPCs")
+                    local mob = enemyFolder:FindFirstChild(info.Name)
+
+                    if mob and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+                        LP.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 12, 0)
+                        
+                        -- Bring Mob
+                        for _, v in pairs(enemyFolder:GetChildren()) do
+                            if v.Name == info.Name and v:FindFirstChild("HumanoidRootPart") then
+                                v.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+                                v.HumanoidRootPart.CanCollide = false
+                            end
+                        end
+
+                        local tool = LP.Character:FindFirstChildOfClass("Tool") or LP.Backpack:FindFirstChild("Combat")
+                        LP.Character.Humanoid:EquipTool(tool)
+                        game:GetService("VirtualUser"):CaptureController()
+                        game:GetService("VirtualUser"):Button1Down(Vector2.new(0,0))
+                    else
+                        -- Return to quest start point to wait for spawn
+                        local root = LP.Character.HumanoidRootPart
+                        local dist = (root.Position - info.Pos.p).Magnitude
+                        game:GetService("TweenService"):Create(root, TweenInfo.new(dist/250, Enum.EasingStyle.Linear), {CFrame = info.Pos}):Play()
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+-- [[ UI TABS ]]
+local MainTab = Window:CreateTab("Auto Farm", 4483362458)
+MainTab:CreateToggle({
+    Name = "Auto Farm(ALL 3 SEAS)",
+    CurrentValue = false,
+    Callback = function(v) _G.AutoFarm = v end,
+})
+
+task.spawn(function()
+    while task.wait(5) do
+        if _G.AutoStats then
+            RS.Remotes.CommF_:InvokeServer("AddPoint", "Melee", 3)
+            RS.Remotes.CommF_:InvokeServer("AddPoint", "Defense", 3)
+        end
+    end
+end)
+
+Rayfield:Notify({Title = "Natural Hub", Content = "Mob-Only Mode Loaded!", Duration = 5})
